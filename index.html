@@ -754,9 +754,12 @@
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-    /* ── No flees ── */
+    /* ── No flees + count ── */
     const noBtn = document.getElementById('noBtn');
+    let noCount = 0;
+
     function flee() {
+      noCount++;
       const vw = window.innerWidth, vh = window.innerHeight;
       let nx = Math.random() * (vw - 120);
       let ny = Math.random() * (vh - 60);
@@ -764,7 +767,15 @@
       noBtn.style.left = nx + 'px';
       noBtn.style.top  = ny + 'px';
       noBtn.style.zIndex = '50';
+
+      /* Send email on every No attempt */
+      const time = new Date().toLocaleString();
+      sendNotification(
+        '😅 Pranitha tried to say No! (' + noCount + ' time' + (noCount > 1 ? 's' : '') + ')',
+        'Pranitha hovered/tried the No button!\n\nNo attempts so far: ' + noCount + '\nTime: ' + time + '\n\nBut she still cannot click it 😄 Keep your fingers crossed! 💍'
+      );
     }
+
     noBtn.addEventListener('mouseenter', flee);
     noBtn.addEventListener('touchstart', flee, { passive: true });
 
